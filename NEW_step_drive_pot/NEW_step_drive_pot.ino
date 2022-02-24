@@ -9,7 +9,9 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // to motor port #2 (M3 and M4)
 Adafruit_StepperMotor *stepper = AFMS.getStepper(32, 2);
 
-int Pval = 0;
+
+// farthest from the wood is the analog pin
+// initialize value from the potentiometer
 int potVal = 0;
 
 
@@ -25,19 +27,28 @@ void setup() {
   }
   Serial.println("Motor Shield found.");
 
-  stepper->setSpeed(10);  // 20 rpm
-}
+  stepper->setSpeed(10);  // 10 rpm
+   
+} 
 
 void loop() {
   
-  potVal = map(analogRead(A3),0,1024,0,500);
-  print(potVal);
-  if (potVal>Pval)
-  stepper->step(100, FORWARD, SINGLE);
-  if (potVal<Pval)
-  stepper->step(100, BACKWARD, SINGLE);
+  potVal = map(analogRead(A3),0,1024,0,1000);
+  Serial.println(potVal);
 
-  Pval = potVal;
+  // forward rotates away 
+  while (potVal < 520 && potVal > 0){
+    stepper->step(100, FORWARD, SINGLE);
+    potVal = map(analogRead(A3),0,1024,0,1000);
+    Serial.println(potVal);
+  }
+ 
 
-Serial.println(Pval); //for debugging
+  potVal = map(analogRead(A3),0,1024,0,1000);
+  while (potVal > 520 && potVal < 995){
+    stepper->step(100, BACKWARD, SINGLE);
+    potVal = map(analogRead(A3),0,1024,0,1000);
+    Serial.println(potVal);
+  }
+
 }

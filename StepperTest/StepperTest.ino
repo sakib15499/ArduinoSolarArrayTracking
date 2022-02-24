@@ -31,12 +31,11 @@ void setup() {
   }
   Serial.println("Motor Shield found.");
 
-  myMotor->setSpeed(10);  // 20 rpm
+  myMotor->setSpeed(50);  // 20 rpm
 }
 
 void loop() {
   Serial.println("Single coil steps");
-  myMotor->step(100, FORWARD, SINGLE);
   myMotor->step(100, BACKWARD, SINGLE);
 
 //  Serial.println("Double coil steps");
